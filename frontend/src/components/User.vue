@@ -22,10 +22,10 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Slack</th>
+                            <th v-column-sortable:id>#</th>
+                            <th v-column-sortable:name>Name</th>
+                            <th v-column-sortable:email>Email</th>
+                            <th v-column-sortable:slack>Slack</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+    import columnSortable from 'vue-column-sortable'
     import api from "./backend-api";
 
     export default {
@@ -74,7 +75,11 @@
             this.getData();
 
         },
+        directives: {columnSortable},
         methods: {
+            orderBy(sortFn){
+                this.retrievedUser.sort(sortFn);
+            },
             createNewUser () {
                 console.log(this.user.name + " " + this.user.email + " "  + this.user.slack);
                 api.createUser(this.user.name, this.user.email, this.user.slack).then(response => {
@@ -100,8 +105,10 @@
                     .catch(e => {
                         this.errors.push(e)
                     })
-            }
-        }
+            },
+
+        },
+
     }
 </script>
 
